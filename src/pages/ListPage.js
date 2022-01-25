@@ -19,7 +19,6 @@ const ListPage = () => {
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/users"
       );
-      console.log(response.data);
       setData(response.data);
     } catch (err) {
       setError("Something went wrong!");
@@ -28,12 +27,14 @@ const ListPage = () => {
     setIsLoading(false);
   }
 
-  if (isLoading) {
-    return <p>Fetching data...</p>;
-  } else if (!isLoading && error) {
-    return <p>{error}</p>;
-  }
-  return <List list={data} />;
+  return (
+    <div className="page-list">
+      <h2>Current users</h2>
+      {isLoading && <p>Fetching data...</p>}
+      {!isLoading && error && <p>{error}</p>}
+      {!isLoading && !error && <List list={data} />}
+    </div>
+  );
 };
 
 export default ListPage;

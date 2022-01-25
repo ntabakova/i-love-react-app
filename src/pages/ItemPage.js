@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
+import ListItem from "../components/ListItem";
 const axios = require("axios");
 
 const ItemPage = () => {
@@ -8,11 +9,7 @@ const ItemPage = () => {
   const [error, setError] = useState(null);
   const params = useParams();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
 
@@ -26,27 +23,18 @@ const ItemPage = () => {
     }
 
     setIsLoading(false);
-  }
+  }, [params.id]);
 
-  if (isLoading) {
-    return <p>Fetching data...</p>;
-  } else if (!isLoading && error) {
-    return <p>{error}</p>;
-  }
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
   return (
-    <div>
-      <h2>Details for {data.name} </h2>
-      <div>Name: {data.name}</div>
-      <div>Username: {data.username}</div>
-      <div>Email: {data.email}</div>
-      <div>City: {data.address ? data.address.city : ""}</div>
-      <div>Phone: {data.phone}</div>
-      <div>
-        Website:
-        <a href={`http://${data.website}`} target="_blank" rel="noreferrer">
-          {data.website}
-        </a>
-      </div>
+    <div className="page-item">
+      <h2>User Details</h2>
+      {isLoading && <p>Fetching data...</p>}
+      {!isLoading && error && <p>{error}</p>}
+      {!isLoading && !error && <ListItem data={data} inPage={true} />}
     </div>
   );
 };
