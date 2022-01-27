@@ -7,10 +7,8 @@ const ListItem = (props) => {
   const viewDetails = () => {
     navigate(`/list/${props.data.id}`);
   };
-  const websiteLinkHandler = (e) => {
-    e.stopPropagation();
-  };
-  const emailLinkHandler = (e) => {
+
+  const disablePropagation = (e) => {
     e.stopPropagation();
   };
 
@@ -20,7 +18,7 @@ const ListItem = (props) => {
       <div className={styles.line}>Username: {props.data.username}</div>
       <div className={styles.line}>
         Email:{" "}
-        <a href={`mailto:${props.data.email}`} onClick={emailLinkHandler}>
+        <a href={`mailto:${props.data.email}`} onClick={disablePropagation}>
           {props.data.email}
         </a>
       </div>
@@ -39,7 +37,7 @@ const ListItem = (props) => {
           href={`http://${props.data.website}`}
           target="_blank"
           rel="noreferrer"
-          onClick={websiteLinkHandler}
+          onClick={disablePropagation}
           className={styles.website}
         >
           {props.data.website}
